@@ -7,7 +7,7 @@ class BallSystem {
   }
 
   void addBall() {
-    balls.add( new Ball());
+    balls.add(new Ball());
   }
 
   void runSystem() {

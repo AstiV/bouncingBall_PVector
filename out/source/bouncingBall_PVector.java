@@ -14,20 +14,20 @@ import java.io.IOException;
 
 public class bouncingBall_PVector extends PApplet {
 
-Ball b;
+BallSystem bs;
+
+public void settings() {
+  size(650, 750);
+}
 
 public void setup() {
-  
-  b = new Ball();
+  bs = new BallSystem();
 }
 
 public void draw() { 
-  
-  // Draw stuff
   background(79,98,114);
-  b.displayBall();
-  b.moveBall();
-  b.checkBorders();
+  bs.addBall();
+  bs.runSystem();
 }
 class Ball {
   
@@ -49,6 +49,9 @@ class Ball {
   // float ySpeed = 2.3;
   // xSpeed and ySpeed can be expressed in PVector oblect (velocity)
   PVector velocity;
+
+  // life
+  float lifespan = 255;
 
   // Color
   int ballColor;
@@ -77,18 +80,25 @@ class Ball {
   
   }
 
+  public void runBall() {
+    displayBall();
+    moveBall();
+    checkBorders();
+  }
+
+
   // --------------------------------
   // Display Ball
   // --------------------------------
 
     public void displayBall(){
-      stroke(strokeColor);
-      fill(ballColor);
+      stroke(strokeColor, lifespan);
+      fill(ballColor, lifespan);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
   
   // -------------------------------------------
-  // Move circle by adding to it's coordinates
+  // Move Ball by adding to it's coordinates
   // -------------------------------------------
 
   public void moveBall() {
@@ -97,6 +107,7 @@ class Ball {
     // => translates into the following PVectors
     // + operator does not work with vectors => function is needed
     location.add(velocity);
+    lifespan -= 2.0f;
   }
 
   // ---------------------------------------------------------
@@ -118,8 +129,38 @@ class Ball {
       velocity.y = velocity.y * -1;
     }
   }
+
+  public boolean isDead() {
+    if (lifespan < 0.0f) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
-  public void settings() {  size(650, 750); }
+class BallSystem {
+  ArrayList<Ball> balls;
+
+  // constructor
+  BallSystem() {
+    balls = new ArrayList<Ball>();
+  }
+
+  public void addBall() {
+    balls.add(new Ball());
+  }
+
+  public void runSystem() {
+    for (int i = balls.size()-1; i >= 0; i--) {
+      Ball b = balls.get(i);
+      b.runBall();
+      
+      if (b.isDead()) {
+        balls.remove(i);
+      }
+    }
+  }
+}
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "bouncingBall_PVector" };
     if (passedArgs != null) {

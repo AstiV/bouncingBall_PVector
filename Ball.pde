@@ -99,7 +99,7 @@ class Ball {
     }
   }
 
-  void isDead() {
+  boolean isDead() {
     if (lifespan < 0.0) {
       return true;
     } else {
