@@ -35,7 +35,7 @@ class Ball {
   // Position and Size of Ball
   // --------------------------------
 
-  float ballSize = 50.0f;   // Diameter of Ball
+  float ballSize = 30.0f;   // Diameter of Ball
 
   // float ballX, ballY;  // Position of Ball
   // => x and y can be expressed in PVector object (location)
@@ -49,6 +49,11 @@ class Ball {
   // float ySpeed = 2.3;
   // xSpeed and ySpeed can be expressed in PVector oblect (velocity)
   PVector velocity;
+
+  // --------------------------------
+  // Acceleration
+  // --------------------------------
+  PVector acceleration;
 
   // life
   float lifespan = 255;
@@ -65,7 +70,7 @@ class Ball {
     // ballColor = color(173,252,249);
 
     // random color
-    ballColor = color(random(255), random(255), random(255));
+    ballColor = color(random(100), 0, random(250));
     strokeColor = ballColor;
     
   
@@ -74,7 +79,8 @@ class Ball {
     // ballX = random(width);
     // ballY = random(height);
     location = new PVector(random(width), random(height));
-    velocity = new PVector(3.0f, 2.3f);
+    velocity = new PVector(0.0f, 0.0f);
+    acceleration = new PVector(0.0f, 0.0f);
 
     ellipseMode(CENTER);
   
@@ -107,7 +113,15 @@ class Ball {
     // => translates into the following PVectors
     // + operator does not work with vectors => function is needed
     location.add(velocity);
-    lifespan -= 2.0f;
+    velocity.add(acceleration);
+    lifespan -= 0.5f;
+
+    // random acceleration (set acc and vel values in constructor to 0!)
+    acceleration = PVector.random2D();
+
+    // limiting velocity
+    velocity.limit(15);
+    acceleration.limit(10);
   }
 
   // ---------------------------------------------------------
