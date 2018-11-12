@@ -85,12 +85,17 @@ class Ball {
     velocity.add(acceleration);
     lifespan -= 0.5;
 
+    // acceleration towards mouse
+    PVector mouse = new PVector(mouseX, mouseY);
+    mouse.sub(location);
+    mouse.setMag(0.1);
+    acceleration = mouse;
+
     // random acceleration (set acc and vel values in constructor to 0!)
-    acceleration = PVector.random2D();
+    //acceleration = PVector.random2D();
 
     // limiting velocity
-    velocity.limit(15);
-    acceleration.limit(10);
+    velocity.limit(7.5);
   }
 
   // ---------------------------------------------------------
@@ -110,6 +115,14 @@ class Ball {
       velocity.x = velocity.x * -1; 
     } else if (location.y > height || location.y < 0) {
       velocity.y = velocity.y * -1;
+    }
+  }
+
+  boolean isDying() {
+    if (lifespan < 100.0) {
+      return true;
+    } else {
+      return false;
     }
   }
 

@@ -116,12 +116,17 @@ class Ball {
     velocity.add(acceleration);
     lifespan -= 0.5f;
 
+    // acceleration towards mouse
+    PVector mouse = new PVector(mouseX, mouseY);
+    mouse.sub(location);
+    mouse.setMag(0.1f);
+    acceleration = mouse;
+
     // random acceleration (set acc and vel values in constructor to 0!)
-    acceleration = PVector.random2D();
+    //acceleration = PVector.random2D();
 
     // limiting velocity
-    velocity.limit(15);
-    acceleration.limit(10);
+    velocity.limit(7.5f);
   }
 
   // ---------------------------------------------------------
@@ -141,6 +146,14 @@ class Ball {
       velocity.x = velocity.x * -1; 
     } else if (location.y > height || location.y < 0) {
       velocity.y = velocity.y * -1;
+    }
+  }
+
+  public boolean isDying() {
+    if (lifespan < 100.0f) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -169,6 +182,11 @@ class BallSystem {
       Ball b = balls.get(i);
       b.runBall();
       
+      if (b.isDying()) {
+          b.velocity.x -= 3.0f;
+          b.velocity.y -= 3.0f;
+      }
+
       if (b.isDead()) {
         balls.remove(i);
       }

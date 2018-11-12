@@ -15,6 +15,11 @@ class BallSystem {
       Ball b = balls.get(i);
       b.runBall();
       
+      if (b.isDying()) {
+          b.velocity.x -= 3.0;
+          b.velocity.y -= 3.0;
+      }
+
       if (b.isDead()) {
         balls.remove(i);
       }
