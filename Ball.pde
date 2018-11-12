@@ -19,6 +19,9 @@ class Ball {
   // xSpeed and ySpeed can be expressed in PVector oblect (velocity)
   PVector velocity;
 
+  // life
+  float lifespan = 255;
+
   // Color
   color ballColor;
   color strokeColor;
@@ -46,18 +49,25 @@ class Ball {
   
   }
 
+  void runBall() {
+    displayBall();
+    moveBall();
+    checkBorders();
+  }
+
+
   // --------------------------------
   // Display Ball
   // --------------------------------
 
     void displayBall(){
-      stroke(strokeColor);
-      fill(ballColor);
+      stroke(strokeColor, lifespan);
+      fill(ballColor, lifespan);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
   
   // -------------------------------------------
-  // Move circle by adding to it's coordinates
+  // Move Ball by adding to it's coordinates
   // -------------------------------------------
 
   void moveBall() {
@@ -66,6 +76,7 @@ class Ball {
     // => translates into the following PVectors
     // + operator does not work with vectors => function is needed
     location.add(velocity);
+    lifespan -= 2.0;
   }
 
   // ---------------------------------------------------------
@@ -85,6 +96,14 @@ class Ball {
       velocity.x = velocity.x * -1; 
     } else if (location.y > height || location.y < 0) {
       velocity.y = velocity.y * -1;
+    }
+  }
+
+  void isDead() {
+    if (lifespan < 0.0) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
