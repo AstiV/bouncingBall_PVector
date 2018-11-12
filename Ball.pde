@@ -119,7 +119,7 @@ class Ball {
   }
 
   boolean isDying() {
-    if (lifespan < 100.0) {
+    if (lifespan < 80.0) {
       return true;
     } else {
       return false;

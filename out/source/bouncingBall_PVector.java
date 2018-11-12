@@ -150,7 +150,7 @@ class Ball {
   }
 
   public boolean isDying() {
-    if (lifespan < 100.0f) {
+    if (lifespan < 80.0f) {
       return true;
     } else {
       return false;
