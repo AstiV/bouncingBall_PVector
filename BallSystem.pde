@@ -10,6 +10,19 @@ class BallSystem {
     balls.add(new Ball());
   }
 
+  // Apply force to all particles
+  void applyForce(PVector f) {
+    for (Ball b : balls) {
+      b.applyForce(f);
+    }
+  }
+
+  void followMouse() {
+    for (Ball b : balls) {
+      b.followMouse();
+    }
+  }
+
   void runSystem() {
     for (int i = balls.size()-1; i >= 0; i--) {
       Ball b = balls.get(i);

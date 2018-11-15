@@ -71,6 +71,21 @@ class Ball {
       fill(ballColor, lifespan);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
+
+  // --------------------------------
+  // Add Gravity
+  // --------------------------------
+
+  void applyForce(PVector force) {
+    acceleration.add(force);
+  }
+
+  void followMouse() {
+    PVector mouse = new PVector(mouseX, mouseY);
+    mouse.sub(location);
+    mouse.setMag(0.1);
+    acceleration = mouse;
+  }
   
   // -------------------------------------------
   // Move Ball by adding to it's coordinates
@@ -85,17 +100,14 @@ class Ball {
     velocity.add(acceleration);
     lifespan -= 0.5;
 
-    // acceleration towards mouse
-    PVector mouse = new PVector(mouseX, mouseY);
-    mouse.sub(location);
-    mouse.setMag(0.1);
-    acceleration = mouse;
-
     // random acceleration (set acc and vel values in constructor to 0!)
     //acceleration = PVector.random2D();
 
     // limiting velocity
     velocity.limit(7.5);
+
+    // clear out acceleration
+    acceleration.mult(0);
   }
 
   // ---------------------------------------------------------

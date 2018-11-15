@@ -26,6 +26,15 @@ public void setup() {
 
 public void draw() { 
   background(79,98,114);
+
+  PVector gravity = new PVector(0,0.01f);
+  bs.applyForce(gravity);
+
+  if (mousePressed) {
+    // acceleration towards mouse
+    bs.followMouse();
+  }
+
   bs.addBall();
   bs.runSystem();
 }
@@ -102,6 +111,21 @@ class Ball {
       fill(ballColor, lifespan);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
+
+  // --------------------------------
+  // Add Gravity
+  // --------------------------------
+
+  public void applyForce(PVector force) {
+    acceleration.add(force);
+  }
+
+  public void followMouse() {
+    PVector mouse = new PVector(mouseX, mouseY);
+    mouse.sub(location);
+    mouse.setMag(0.1f);
+    acceleration = mouse;
+  }
   
   // -------------------------------------------
   // Move Ball by adding to it's coordinates
@@ -116,17 +140,14 @@ class Ball {
     velocity.add(acceleration);
     lifespan -= 0.5f;
 
-    // acceleration towards mouse
-    PVector mouse = new PVector(mouseX, mouseY);
-    mouse.sub(location);
-    mouse.setMag(0.1f);
-    acceleration = mouse;
-
     // random acceleration (set acc and vel values in constructor to 0!)
     //acceleration = PVector.random2D();
 
     // limiting velocity
     velocity.limit(7.5f);
+
+    // clear out acceleration
+    acceleration.mult(0);
   }
 
   // ---------------------------------------------------------
@@ -175,6 +196,19 @@ class BallSystem {
 
   public void addBall() {
     balls.add(new Ball());
+  }
+
+  // Apply force to all particles
+  public void applyForce(PVector f) {
+    for (Ball b : balls) {
+      b.applyForce(f);
+    }
+  }
+
+  public void followMouse() {
+    for (Ball b : balls) {
+      b.followMouse();
+    }
   }
 
   public void runSystem() {
