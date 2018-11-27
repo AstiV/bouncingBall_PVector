@@ -4,9 +4,7 @@ import org.openkinect.processing.*;
 Kinect kinect;
 BallSystem bs;
 
-// int k = 0;
-float minThresh = 650;
-float maxThresh = 725;
+int k = 0;
 int time = 0;
 
 void setup() {
@@ -46,7 +44,7 @@ void draw() {
       int offset = x + y * kinect.width;
       int d = depth[offset];
       // Check if the current pixel is between the threshold values
-      if (d > minThresh && d < maxThresh) {
+      if (d > 650 && d < 725) {
         //print("Depth Value ", d, "\n");
         // Hold in a variable the amount of pixels that are within the threshold
         totalPixels++;
@@ -69,4 +67,3 @@ void draw() {
     }
   }
 }
-

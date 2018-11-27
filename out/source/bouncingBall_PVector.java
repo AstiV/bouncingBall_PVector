@@ -3,6 +3,9 @@ import processing.data.*;
 import processing.event.*; 
 import processing.opengl.*; 
 
+import org.openkinect.freenect.*; 
+import org.openkinect.processing.*; 
+
 import java.util.HashMap; 
 import java.util.ArrayList; 
 import java.io.File; 
@@ -14,13 +17,23 @@ import java.io.IOException;
 
 public class bouncingBall_PVector extends PApplet {
 
+
+
+
+Kinect kinect;
 BallSystem bs;
 
-public void settings() {
-  size(650, 750);
-}
+// int k = 0;
+float minThresh = 650;
+float maxThresh = 725;
+int time = 0;
 
 public void setup() {
+  
+  kinect = new Kinect(this);
+  kinect.enableMirror(true);
+  kinect.initDepth();
+
   bs = new BallSystem();
 }
 
@@ -30,21 +43,59 @@ public void draw() {
   PVector gravity = new PVector(0,0.01f);
   bs.applyForce(gravity);
 
-  if (mousePressed) {
-    // acceleration towards mouse
-    bs.followMouse();
-  }
 
+  // // if (mousePressed) {
+  // //   bs.repelledByMouse();
+  // // }
+
+  // if(millis() > time + 50) {
+  //   bs.addBall();
+  //   time = millis();
+  // }
   bs.addBall();
   bs.runSystem();
+
+  int totalPixels = 0;
+  int allPixels = 0;
+  // get raw depth values as array of integers
+  int[] depth = kinect.getRawDepth();  
+ 
+  for (int x = 0; x < kinect.width; x++) {
+    for (int y = 0; y < kinect.height; y++) {
+      int offset = x + y * kinect.width;
+      int d = depth[offset];
+      // Check if the current pixel is between the threshold values
+      if (d > minThresh && d < maxThresh) {
+        //print("Depth Value ", d, "\n");
+        // Hold in a variable the amount of pixels that are within the threshold
+        totalPixels++;
+        // If more than 100 pixels are withing the threshold, (color them) follow them
+        if(totalPixels > 100) {
+          // acceleration towards mouse
+          bs.attract(x, y);
+          // Comment this out if its too laggy
+          // print(k + 1, "\n");
+          //k = k + 1;
+        } 
+       } 
+      // if (d > 550 && d < 600) {
+      //   allPixels++;
+      //   if(allPixels > 100) {
+      //     bs.repulse(x, y);
+      //     //k = k + 1;
+      //   }
+      // }
+    }
+  }
 }
+
 class Ball {
   
   // --------------------------------
   // Position and Size of Ball
   // --------------------------------
 
-  float ballSize = 30.0f;   // Diameter of Ball
+  float ballSize = 15.0f;   // Diameter of Ball
 
   // float ballX, ballY;  // Position of Ball
   // => x and y can be expressed in PVector object (location)
@@ -65,7 +116,7 @@ class Ball {
   PVector acceleration;
 
   // life
-  float lifespan = 255;
+  // float lifespan = 255;
 
   // Color
   int ballColor;
@@ -107,8 +158,10 @@ class Ball {
   // --------------------------------
 
     public void displayBall(){
-      stroke(strokeColor, lifespan);
-      fill(ballColor, lifespan);
+      //stroke(strokeColor, lifespan);
+      stroke(strokeColor);
+      //fill(ballColor, lifespan);
+      fill(ballColor);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
 
@@ -120,10 +173,17 @@ class Ball {
     acceleration.add(force);
   }
 
-  public void followMouse() {
-    PVector mouse = new PVector(mouseX, mouseY);
+  public void attract(int x,int y) {
+    PVector mouse = new PVector(x, y);
     mouse.sub(location);
-    mouse.setMag(0.1f);
+    mouse.setMag(0.3f);
+    acceleration = mouse;
+  }
+
+  public void repulse(int x,int y) {
+    PVector mouse = new PVector(x, y);
+    mouse.sub(location);
+    mouse.setMag(-0.2f);
     acceleration = mouse;
   }
   
@@ -138,7 +198,7 @@ class Ball {
     // + operator does not work with vectors => function is needed
     location.add(velocity);
     velocity.add(acceleration);
-    lifespan -= 0.5f;
+    // lifespan -= 0.5;
 
     // random acceleration (set acc and vel values in constructor to 0!)
     //acceleration = PVector.random2D();
@@ -170,21 +230,21 @@ class Ball {
     }
   }
 
-  public boolean isDying() {
-    if (lifespan < 80.0f) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // boolean isDying() {
+  //   if (lifespan < 80.0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  public boolean isDead() {
-    if (lifespan < 0.0f) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // boolean isDead() {
+  //   if (lifespan < 0.0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 }
 class BallSystem {
   ArrayList<Ball> balls;
@@ -195,7 +255,9 @@ class BallSystem {
   }
 
   public void addBall() {
-    balls.add(new Ball());
+    if(balls.size() < 50) {
+      balls.add(new Ball());
+    }
   }
 
   // Apply force to all particles
@@ -205,9 +267,17 @@ class BallSystem {
     }
   }
 
-  public void followMouse() {
+  public void attract(int x,int y) {
+    // print(x, y);
     for (Ball b : balls) {
-      b.followMouse();
+      b.attract(x, y);
+    }
+  }
+
+  public void repulse(int x,int y) {
+    // print(x, y);
+    for (Ball b : balls) {
+      b.repulse(x, y);
     }
   }
 
@@ -216,17 +286,18 @@ class BallSystem {
       Ball b = balls.get(i);
       b.runBall();
       
-      if (b.isDying()) {
-          b.velocity.x -= 3.0f;
-          b.velocity.y -= 3.0f;
-      }
+      // if (b.isDying()) {
+      //     // b.velocity.x -= 3.0;
+      //     // b.velocity.y -= 3.0;
+      // }
 
-      if (b.isDead()) {
-        balls.remove(i);
-      }
+      // if (b.isDead()) {
+      //   balls.remove(i);
+      // }
     }
   }
 }
+  public void settings() {  size(640, 480); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "bouncingBall_PVector" };
     if (passedArgs != null) {

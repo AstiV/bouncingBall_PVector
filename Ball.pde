@@ -4,7 +4,7 @@ class Ball {
   // Position and Size of Ball
   // --------------------------------
 
-  float ballSize = 30.0;   // Diameter of Ball
+  float ballSize = 15.0;   // Diameter of Ball
 
   // float ballX, ballY;  // Position of Ball
   // => x and y can be expressed in PVector object (location)
@@ -25,7 +25,7 @@ class Ball {
   PVector acceleration;
 
   // life
-  float lifespan = 255;
+  // float lifespan = 255;
 
   // Color
   color ballColor;
@@ -67,8 +67,10 @@ class Ball {
   // --------------------------------
 
     void displayBall(){
-      stroke(strokeColor, lifespan);
-      fill(ballColor, lifespan);
+      //stroke(strokeColor, lifespan);
+      stroke(strokeColor);
+      //fill(ballColor, lifespan);
+      fill(ballColor);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
 
@@ -80,10 +82,17 @@ class Ball {
     acceleration.add(force);
   }
 
-  void followMouse() {
-    PVector mouse = new PVector(mouseX, mouseY);
+  void attract(int x,int y) {
+    PVector mouse = new PVector(x, y);
     mouse.sub(location);
-    mouse.setMag(0.1);
+    mouse.setMag(0.3);
+    acceleration = mouse;
+  }
+
+  void repulse(int x,int y) {
+    PVector mouse = new PVector(x, y);
+    mouse.sub(location);
+    mouse.setMag(-0.2);
     acceleration = mouse;
   }
   
@@ -98,7 +107,7 @@ class Ball {
     // + operator does not work with vectors => function is needed
     location.add(velocity);
     velocity.add(acceleration);
-    lifespan -= 0.5;
+    // lifespan -= 0.5;
 
     // random acceleration (set acc and vel values in constructor to 0!)
     //acceleration = PVector.random2D();
@@ -130,19 +139,19 @@ class Ball {
     }
   }
 
-  boolean isDying() {
-    if (lifespan < 80.0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // boolean isDying() {
+  //   if (lifespan < 80.0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  boolean isDead() {
-    if (lifespan < 0.0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  // boolean isDead() {
+  //   if (lifespan < 0.0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 }
