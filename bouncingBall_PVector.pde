@@ -62,7 +62,7 @@ void draw() {
         if(totalPixels > 100) {
           float avgX = sumX / totalPixels;
           float avgY = sumY / totalPixels;
-          // acceleration towards mouse
+          // acceleration towards hand
           bs.attract(avgX, avgY);
           // Comment this out if its too laggy
           // print(k + 1, "\n");

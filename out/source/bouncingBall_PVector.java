@@ -81,8 +81,10 @@ public void draw() {
         if(totalPixels > 100) {
           float avgX = sumX / totalPixels;
           float avgY = sumY / totalPixels;
-          // acceleration towards mouse
+          // acceleration towards hand
           bs.attract(avgX, avgY);
+          bs.handBall(avgX, avgY);
+
           // Comment this out if its too laggy
           // print(k + 1, "\n");
           //k = k + 1;
@@ -268,6 +270,10 @@ class BallSystem {
     if(balls.size() < 50) {
       balls.add(new Ball());
     }
+  }
+
+  public void handBall(float x, float y) {
+    balls.add(new Ball());
   }
 
   // Apply force to all particles
