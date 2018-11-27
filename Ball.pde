@@ -25,7 +25,7 @@ class Ball {
   PVector acceleration;
 
   // life
-  // float lifespan = 255;
+  float lifespan = 255;
 
   // Color
   color ballColor;
@@ -67,10 +67,10 @@ class Ball {
   // --------------------------------
 
     void displayBall(){
-      //stroke(strokeColor, lifespan);
-      stroke(strokeColor);
-      //fill(ballColor, lifespan);
-      fill(ballColor);
+      stroke(strokeColor, lifespan);
+      //stroke(strokeColor);
+      fill(ballColor, lifespan);
+      //fill(ballColor);
       ellipse(location.x, location.y, ballSize, ballSize);
     }
 
@@ -82,7 +82,7 @@ class Ball {
     acceleration.add(force);
   }
 
-  void attract(int x,int y) {
+  void attract(float x,float y) {
     PVector mouse = new PVector(x, y);
     mouse.sub(location);
     mouse.setMag(0.3);
@@ -107,7 +107,7 @@ class Ball {
     // + operator does not work with vectors => function is needed
     location.add(velocity);
     velocity.add(acceleration);
-    // lifespan -= 0.5;
+    lifespan -= 0.5;
 
     // random acceleration (set acc and vel values in constructor to 0!)
     //acceleration = PVector.random2D();
@@ -139,19 +139,19 @@ class Ball {
     }
   }
 
-  // boolean isDying() {
-  //   if (lifespan < 80.0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  boolean isDying() {
+    if (lifespan < 80.0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-  // boolean isDead() {
-  //   if (lifespan < 0.0) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
+  boolean isDead() {
+    if (lifespan < 0.0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

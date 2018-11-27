@@ -29,15 +29,18 @@ void draw() {
   // //   bs.repelledByMouse();
   // // }
 
-  // if(millis() > time + 50) {
-  //   bs.addBall();
-  //   time = millis();
-  // }
-  bs.addBall();
+  if(millis() > time + 80) {
+    bs.addBall();
+    time = millis();
+  }
+  //bs.addBall();
   bs.runSystem();
 
-  int totalPixels = 0;
-  int allPixels = 0;
+  float sumX = 0;
+  float sumY = 0; 
+  float totalPixels = 0;
+  // float allPixels = 0;
+  
   // get raw depth values as array of integers
   int[] depth = kinect.getRawDepth();  
  
@@ -48,12 +51,19 @@ void draw() {
       // Check if the current pixel is between the threshold values
       if (d > minThresh && d < maxThresh) {
         //print("Depth Value ", d, "\n");
+
+        // sum up x and y values to calculate average (in order to make balls follow center of hand)
+        sumX += x;
+        sumY += y;
+
         // Hold in a variable the amount of pixels that are within the threshold
         totalPixels++;
         // If more than 100 pixels are withing the threshold, (color them) follow them
         if(totalPixels > 100) {
+          float avgX = sumX / totalPixels;
+          float avgY = sumY / totalPixels;
           // acceleration towards mouse
-          bs.attract(x, y);
+          bs.attract(avgX, avgY);
           // Comment this out if its too laggy
           // print(k + 1, "\n");
           //k = k + 1;

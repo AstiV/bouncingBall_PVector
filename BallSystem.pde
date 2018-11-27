@@ -19,19 +19,19 @@ class BallSystem {
     }
   }
 
-  void attract(int x,int y) {
+  void attract(float x,float y) {
     // print(x, y);
     for (Ball b : balls) {
       b.attract(x, y);
     }
   }
 
-  void repulse(int x,int y) {
-    // print(x, y);
-    for (Ball b : balls) {
-      b.repulse(x, y);
-    }
-  }
+  // void repulse(int x,int y) {
+  //   // print(x, y);
+  //   for (Ball b : balls) {
+  //     b.repulse(x, y);
+  //   }
+  // }
 
   void runSystem() {
     for (int i = balls.size()-1; i >= 0; i--) {
@@ -39,13 +39,13 @@ class BallSystem {
       b.runBall();
       
       // if (b.isDying()) {
-      //     // b.velocity.x -= 3.0;
-      //     // b.velocity.y -= 3.0;
+      //     b.acceleration.x -= 3.0;
+      //     b.acceleration.y -= 3.0;
       // }
 
-      // if (b.isDead()) {
-      //   balls.remove(i);
-      // }
+      if (b.isDead()) {
+        balls.remove(i);
+      }
     }
   }
 }
