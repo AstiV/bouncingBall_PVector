@@ -30,12 +30,12 @@ class BallSystem {
     }
   }
 
-  // void repulse(int x,int y) {
-  //   // print(x, y);
-  //   for (Ball b : balls) {
-  //     b.repulse(x, y);
-  //   }
-  // }
+  void repulse(float x,float y) {
+    // println("Repulse Coordinates from BS: "+x, y);
+    for (Ball b : balls) {
+      b.repulse(x, y);
+    }
+  }
 
   void runSystem() {
     for (int i = balls.size()-1; i >= 0; i--) {

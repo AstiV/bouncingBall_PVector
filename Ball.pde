@@ -39,7 +39,7 @@ class Ball {
     // ballColor = color(173,252,249);
 
     // random color
-    ballColor = color(random(50), random(255), random(100));
+    ballColor = color(random(50), random(255), random(0));
     strokeColor = ballColor;
     
   
@@ -89,8 +89,9 @@ class Ball {
     acceleration = mouse;
   }
 
-  void repulse(int x,int y) {
+  void repulse(float x, float y) {
     PVector mouse = new PVector(x, y);
+    // println("Repulse Coordinates from Ball Class : "+mouse);
     mouse.sub(location);
     mouse.setMag(-0.2);
     acceleration = mouse;

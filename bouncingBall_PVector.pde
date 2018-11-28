@@ -5,8 +5,6 @@ Kinect kinect;
 BallSystem bs;
 
 // int k = 0;
-float minThresh = 650;
-float maxThresh = 725;
 int time = 0;
 
 void setup() {
@@ -20,63 +18,70 @@ void setup() {
 
 void draw() { 
   background(0);
+    //bs.addBall();
+  bs.runSystem();
 
   PVector gravity = new PVector(0,0.01);
   bs.applyForce(gravity);
 
+  float sumX = 0;
+  float sumY = 0; 
+  float sumZ = 0;
+  float totalPixels = 0;
+  // float allPixels = 0;
+  float avgX = 0;
+  float avgY = 0;
+  float avgZ = 0;
 
   // // if (mousePressed) {
   // //   bs.repelledByMouse();
   // // }
 
+  // Add new Balls to system only after a certain amount of time
   if(millis() > time + 80) {
     bs.addBall();
     time = millis();
   }
-  //bs.addBall();
-  bs.runSystem();
-
-  float sumX = 0;
-  float sumY = 0; 
-  float totalPixels = 0;
-  // float allPixels = 0;
   
   // get raw depth values as array of integers
   int[] depth = kinect.getRawDepth();  
  
   for (int x = 0; x < kinect.width; x++) {
     for (int y = 0; y < kinect.height; y++) {
+      
       int offset = x + y * kinect.width;
-      int d = depth[offset];
+      int depthValue = depth[offset];
+      float minThresh = 600; // 624
+      float maxThresh = 745; // 725
+    
       // Check if the current pixel is between the threshold values
-      if (d > minThresh && d < maxThresh) {
-        //print("Depth Value ", d, "\n");
+      if (depthValue > minThresh && depthValue < maxThresh) {
+        //print("Depth Value ", depthValue, "\n");
 
-        // sum up x and y values to calculate average (in order to make balls follow center of hand)
+        // sum up x, y and z values to calculate average (in order to make balls follow center of hand)
         sumX += x;
         sumY += y;
+        sumZ += depthValue;
+        // println(depthValue);
 
         // Hold in a variable the amount of pixels that are within the threshold
         totalPixels++;
-        // If more than 100 pixels are withing the threshold, (color them) follow them
-        if(totalPixels > 100) {
-          float avgX = sumX / totalPixels;
-          float avgY = sumY / totalPixels;
-          // acceleration towards hand
-          bs.attract(avgX, avgY);
-          // Comment this out if its too laggy
-          // print(k + 1, "\n");
-          //k = k + 1;
-        } 
-       } 
-      // if (d > 550 && d < 600) {
-      //   allPixels++;
-      //   if(allPixels > 100) {
-      //     bs.repulse(x, y);
-      //     //k = k + 1;
-      //   }
-      // }
+      }
     }
+        // If more than 100 pixels are withing the threshold, (color them) follow them
+          avgX = sumX / totalPixels;
+          avgY = sumY / totalPixels;
+          avgZ = Math.round(sumZ / (totalPixels * 10));
+          //println("depth: " + avgZ);
+          // PVector avgPosition = new PVector(avgX, avgY);
+          //println("avgZ before: " + avgZ);
+          if(avgZ > 65 && avgZ <= 72){
+          	// println(avgZ);
+          	bs.attract(avgX, avgY);
+          }else if(avgZ > 72 && avgZ < 75){
+            //println("AvgZ from else: "+avgZ);
+          	bs.repulse(avgX, avgY);
+          }
   }
 }
 
