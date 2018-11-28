@@ -19,7 +19,7 @@ void setup() {
 }
 
 void draw() { 
-  background(79,98,114);
+  background(0);
 
   PVector gravity = new PVector(0,0.01);
   bs.applyForce(gravity);
