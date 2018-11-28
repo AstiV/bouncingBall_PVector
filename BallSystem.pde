@@ -12,7 +12,7 @@ class BallSystem {
     }
   }
 
-  // Apply force to all particles
+  // Apply force to all balls
   void applyForce(PVector f) {
     for (Ball b : balls) {
       b.applyForce(f);
@@ -37,11 +37,6 @@ class BallSystem {
     for (int i = balls.size()-1; i >= 0; i--) {
       Ball b = balls.get(i);
       b.runBall();
-      
-      // if (b.isDying()) {
-      //     b.acceleration.x -= 3.0;
-      //     b.acceleration.y -= 3.0;
-      // }
 
       if (b.isDead()) {
         balls.remove(i);

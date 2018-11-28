@@ -47,7 +47,7 @@ class Ball {
 
     // ballX = random(width);
     // ballY = random(height);
-    location = new PVector(random(0, width), random(0, height));
+    location = new PVector(random(width), random(height));
     velocity = new PVector(0.0, 0.0);
     acceleration = new PVector(0.0, 0.0);
 
@@ -82,19 +82,23 @@ class Ball {
     acceleration.add(force);
   }
 
+  // --------------------------------
+  // Add Attraction / Repulsion
+  // --------------------------------
+
   void attract(float x,float y) {
-    PVector mouse = new PVector(x, y);
-    mouse.sub(location);
-    mouse.setMag(0.3);
-    acceleration = mouse;
+    PVector hand = new PVector(x, y);
+    hand.sub(location);
+    hand.setMag(0.3);
+    acceleration = hand;
   }
 
   void repulse(float x, float y) {
-    PVector mouse = new PVector(x, y);
-    // println("Repulse Coordinates from Ball Class : "+mouse);
-    mouse.sub(location);
-    mouse.setMag(-2.0);
-    acceleration = mouse;
+    PVector hand = new PVector(x, y);
+    // println("Repulse Coordinates from Ball Class : "+hand);
+    hand.sub(location);
+    hand.setMag(-2.0);
+    acceleration = hand;
   }
   
   // -------------------------------------------

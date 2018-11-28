@@ -33,10 +33,6 @@ void draw() {
   float avgY = 0;
   float avgZ = 0;
 
-  // // if (mousePressed) {
-  // //   bs.repelledByMouse();
-  // // }
-
   // Add new Balls to system only after a certain amount of time
   if(millis() > time + 80) {
     bs.addBall();

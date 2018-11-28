@@ -163,7 +163,7 @@ class Ball {
 
     // ballX = random(width);
     // ballY = random(height);
-    location = new PVector(random(0, width), random(0, height));
+    location = new PVector(random(width), random(height));
     velocity = new PVector(0.0f, 0.0f);
     acceleration = new PVector(0.0f, 0.0f);
 
@@ -198,19 +198,23 @@ class Ball {
     acceleration.add(force);
   }
 
+  // --------------------------------
+  // Add Attraction / Repulsion
+  // --------------------------------
+
   public void attract(float x,float y) {
-    PVector mouse = new PVector(x, y);
-    mouse.sub(location);
-    mouse.setMag(0.3f);
-    acceleration = mouse;
+    PVector hand = new PVector(x, y);
+    hand.sub(location);
+    hand.setMag(0.3f);
+    acceleration = hand;
   }
 
   public void repulse(float x, float y) {
-    PVector mouse = new PVector(x, y);
-    // println("Repulse Coordinates from Ball Class : "+mouse);
-    mouse.sub(location);
-    mouse.setMag(-2.0f);
-    acceleration = mouse;
+    PVector hand = new PVector(x, y);
+    // println("Repulse Coordinates from Ball Class : "+hand);
+    hand.sub(location);
+    hand.setMag(-2.0f);
+    acceleration = hand;
   }
   
   // -------------------------------------------
@@ -286,7 +290,7 @@ class BallSystem {
     }
   }
 
-  // Apply force to all particles
+  // Apply force to all balls
   public void applyForce(PVector f) {
     for (Ball b : balls) {
       b.applyForce(f);
@@ -311,11 +315,6 @@ class BallSystem {
     for (int i = balls.size()-1; i >= 0; i--) {
       Ball b = balls.get(i);
       b.runBall();
-      
-      // if (b.isDying()) {
-      //     b.acceleration.x -= 3.0;
-      //     b.acceleration.y -= 3.0;
-      // }
 
       if (b.isDead()) {
         balls.remove(i);
