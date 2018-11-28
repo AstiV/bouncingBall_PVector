@@ -38,7 +38,7 @@ public void setup() {
 }
 
 public void draw() { 
-  background(79,98,114);
+  background(0);
 
   PVector gravity = new PVector(0,0.01f);
   bs.applyForce(gravity);
@@ -83,8 +83,6 @@ public void draw() {
           float avgY = sumY / totalPixels;
           // acceleration towards hand
           bs.attract(avgX, avgY);
-          bs.handBall(avgX, avgY);
-
           // Comment this out if its too laggy
           // print(k + 1, "\n");
           //k = k + 1;
@@ -142,7 +140,7 @@ class Ball {
     // ballColor = color(173,252,249);
 
     // random color
-    ballColor = color(random(100), 0, random(250));
+    ballColor = color(random(50), random(255), random(100));
     strokeColor = ballColor;
     
   

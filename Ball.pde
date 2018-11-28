@@ -39,7 +39,7 @@ class Ball {
     // ballColor = color(173,252,249);
 
     // random color
-    ballColor = color(random(100), 0, random(250));
+    ballColor = color(random(50), random(255), random(100));
     strokeColor = ballColor;
     
   
