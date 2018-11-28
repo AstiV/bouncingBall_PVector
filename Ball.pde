@@ -36,10 +36,10 @@ class Ball {
   // --------------------------------
 
   Ball() {
-    // ballColor = color(173,252,249);
+    ballColor = color(173,252,249);
 
     // random color
-    ballColor = color(random(50), random(255), random(200));
+    //ballColor = color(random(50), random(255), random(200));
     strokeColor = ballColor;
     
   
@@ -47,7 +47,7 @@ class Ball {
 
     // ballX = random(width);
     // ballY = random(height);
-    location = new PVector(random(width), random(height));
+    location = new PVector(random(0, width), random(0, height));
     velocity = new PVector(0.0, 0.0);
     acceleration = new PVector(0.0, 0.0);
 
@@ -93,7 +93,7 @@ class Ball {
     PVector mouse = new PVector(x, y);
     // println("Repulse Coordinates from Ball Class : "+mouse);
     mouse.sub(location);
-    mouse.setMag(-0.2);
+    mouse.setMag(-2.0);
     acceleration = mouse;
   }
   

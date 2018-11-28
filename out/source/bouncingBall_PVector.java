@@ -62,46 +62,56 @@ public void draw() {
     time = millis();
   }
   
-  // get raw depth values as array of integers
-  int[] depth = kinect.getRawDepth();  
+  // // get raw depth values as array of integers
+  // int[] depth = kinect.getRawDepth();  
  
-  for (int x = 0; x < kinect.width; x++) {
-    for (int y = 0; y < kinect.height; y++) {
+  // for (int x = 0; x < kinect.width; x++) {
+  //   for (int y = 0; y < kinect.height; y++) {
       
-      int offset = x + y * kinect.width;
-      int depthValue = depth[offset];
-      float minThresh = 600; // 624
-      float maxThresh = 745; // 725
+  //     int offset = x + y * kinect.width;
+  //     int depthValue = depth[offset];
+  //     float minThresh = 600; // 624
+  //     float maxThresh = 745; // 725
     
-      // Check if the current pixel is between the threshold values
-      if (depthValue > minThresh && depthValue < maxThresh) {
-        //print("Depth Value ", depthValue, "\n");
+  //     // Check if the current pixel is between the threshold values
+  //     if (depthValue > minThresh && depthValue < maxThresh) {
+  //       //print("Depth Value ", depthValue, "\n");
 
-        // sum up x, y and z values to calculate average (in order to make balls follow center of hand)
-        sumX += x;
-        sumY += y;
-        sumZ += depthValue;
-        // println(depthValue);
+  //       // sum up x, y and z values to calculate average (in order to make balls follow center of hand)
+  //       sumX += x;
+  //       sumY += y;
+  //       sumZ += depthValue;
+  //       // println(depthValue);
 
-        // Hold in a variable the amount of pixels that are within the threshold
-        totalPixels++;
-      }
-    }
-        // If more than 100 pixels are withing the threshold, (color them) follow them
-          avgX = sumX / totalPixels;
-          avgY = sumY / totalPixels;
-          avgZ = Math.round(sumZ / (totalPixels * 10));
-          //println("depth: " + avgZ);
-          // PVector avgPosition = new PVector(avgX, avgY);
-          //println("avgZ before: " + avgZ);
-          if(avgZ > 65 && avgZ <= 72){
-          	// println(avgZ);
-          	bs.attract(avgX, avgY);
-          }else if(avgZ > 72 && avgZ < 75){
-            //println("AvgZ from else: "+avgZ);
-          	bs.repulse(avgX, avgY);
-          }
-  }
+  //       // Hold in a variable the amount of pixels that are within the threshold
+  //       totalPixels++;
+  //     }
+  //   }
+  //       // If more than 100 pixels are withing the threshold, (color them) follow them
+  //         avgX = sumX / totalPixels;
+  //         avgY = sumY / totalPixels;
+  //         avgZ = Math.round(sumZ / (totalPixels * 10));
+  //         //println("depth: " + avgZ);
+  //         // PVector avgPosition = new PVector(avgX, avgY);
+  //         //println("avgZ before: " + avgZ);
+  //         if(avgZ > 65 && avgZ <= 72){
+  //         	// println(avgZ);
+  //         	bs.attract(avgX, avgY);
+  //         }else if(avgZ > 72 && avgZ < 75){
+  //           //println("AvgZ from else: "+avgZ);
+  //         	bs.repulse(avgX, avgY);
+  //         }
+  // }
+}
+
+public void mouseDragged(){
+	// PVector mouse = new PVector(mouseX, mouseY);
+	bs.attract(mouseX, mouseY);
+}
+
+public void mousePressed(){
+	// PVector mouse = new PVector(mouseX,mouseY);
+	bs.repulse(mouseX, mouseY);
 }
 
 class Ball {
@@ -142,10 +152,10 @@ class Ball {
   // --------------------------------
 
   Ball() {
-    // ballColor = color(173,252,249);
+    ballColor = color(173,252,249);
 
     // random color
-    ballColor = color(random(50), random(255), random(200));
+    //ballColor = color(random(50), random(255), random(200));
     strokeColor = ballColor;
     
   
@@ -153,7 +163,7 @@ class Ball {
 
     // ballX = random(width);
     // ballY = random(height);
-    location = new PVector(random(width), random(height));
+    location = new PVector(random(0, width), random(0, height));
     velocity = new PVector(0.0f, 0.0f);
     acceleration = new PVector(0.0f, 0.0f);
 
@@ -199,7 +209,7 @@ class Ball {
     PVector mouse = new PVector(x, y);
     // println("Repulse Coordinates from Ball Class : "+mouse);
     mouse.sub(location);
-    mouse.setMag(-0.2f);
+    mouse.setMag(-2.0f);
     acceleration = mouse;
   }
   
