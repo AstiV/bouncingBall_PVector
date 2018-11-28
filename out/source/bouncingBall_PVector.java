@@ -286,10 +286,6 @@ class BallSystem {
     }
   }
 
-  public void handBall(float x, float y) {
-    balls.add(new Ball());
-  }
-
   // Apply force to all particles
   public void applyForce(PVector f) {
     for (Ball b : balls) {
@@ -327,6 +323,7 @@ class BallSystem {
     }
   }
 }
+
   public void settings() {  size(640, 480); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "bouncingBall_PVector" };

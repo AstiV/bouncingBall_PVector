@@ -12,10 +12,6 @@ class BallSystem {
     }
   }
 
-  void handBall(float x, float y) {
-    balls.add(new Ball());
-  }
-
   // Apply force to all particles
   void applyForce(PVector f) {
     for (Ball b : balls) {
