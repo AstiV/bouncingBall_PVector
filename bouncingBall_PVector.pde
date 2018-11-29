@@ -4,7 +4,6 @@ import org.openkinect.processing.*;
 Kinect kinect;
 BallSystem bs;
 
-// int k = 0;
 int time = 0;
 
 void setup() {
@@ -18,7 +17,6 @@ void setup() {
 
 void draw() { 
   background(0);
-    //bs.addBall();
   bs.runSystem();
 
   PVector gravity = new PVector(0,0.01);
@@ -28,7 +26,6 @@ void draw() {
   float sumY = 0; 
   float sumZ = 0;
   float totalPixels = 0;
-  // float allPixels = 0;
   float avgX = 0;
   float avgY = 0;
   float avgZ = 0;
@@ -38,6 +35,10 @@ void draw() {
     bs.addBall();
     time = millis();
   }
+
+  // --------------------------------------------------------
+  // Attraction / Repulsion via kinect + spandex interaction
+  // --------------------------------------------------------
   
   // // get raw depth values as array of integers
   // int[] depth = kinect.getRawDepth();  
@@ -80,6 +81,10 @@ void draw() {
   //         }
   // }
 }
+
+// --------------------------------------------------
+// Attraction / Repulsion via mouse interaction
+// --------------------------------------------------
 
 void mouseDragged(){
 	// PVector mouse = new PVector(mouseX, mouseY);
